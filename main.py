@@ -9,7 +9,7 @@ import scipy as sp
 import pandas as pd
 from matplotlib import pyplot as plt
 
-class TSCA:
+class experiment:
     def __init__(self,Z,signal,noise,gamma,reduceComp):
         self.Z = Z
         self.signal = signal
@@ -17,6 +17,4 @@ class TSCA:
         self.gamma = gamma
         self.reduceComp = reduceComp
 
-    def TSCA_func(self):
-        # Implementation of TSCA
-        return 10   
+ 
