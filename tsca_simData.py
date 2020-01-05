@@ -10,6 +10,7 @@ import scipy as sp
 import pandas as pd
 from matplotlib import pyplot as plt
 import TSCA
+import numpy.matlib
 
 fs = 100
 T = 1000
@@ -22,5 +23,10 @@ signal = {
         "space" : np.zeros((m,m)) 
         }
 noise = {
-        "time" : np.random.normal(0,1,T)
-        "space" : }
+        "time" : np.random.normal(0,1,T),
+        "space" : np.matlib.repmat(np.sin(np.arange(m)),m,1)
+        }
+Z = []
+for i in range(signal["time"].size):
+    Z.append(signal["time"][i]*signal["space"]+noise["time"][i]*noise["space"])
+output = TSCA.Func()

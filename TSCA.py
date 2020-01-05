@@ -16,6 +16,7 @@ from matplotlib import pyplot as plt
 def FrobNorm(A,B):
     return np.trace(np.transpose(B)@A)
 
+
 # Implementation of TSCA
 def Func(Z,X,*Y,gammaN = -0.05,reduceComp = 1):
     gamma = [1]
@@ -23,7 +24,7 @@ def Func(Z,X,*Y,gammaN = -0.05,reduceComp = 1):
     C = []
     if X.shape[0] == X.size: # if it is a vector
         T = X.size
-        C.append(outer(X,X)/T) # estimate autocorrelation matrix
+        C.append(np.outer(X,X)/T) # estimate autocorrelation matrix
     else: # it is already a square autocorrelation matrix
             C.append(X)
             T = X.shape[0]
