@@ -11,16 +11,14 @@ import scipy as sp
 from numpy import linalg as la
 import numpy.matlib
 from matplotlib import pyplot as plt
-
+import globalVals
 
 def FrobNorm(A,B):
     return np.trace(np.transpose(B)@A)
 
 
 # Implementation of TSCA
-def Func(Z,X,*Y,gammaN = -0.05,reduceComp = 1):
-    gamma = [1]
-    gamma.append(gammaN) # default noise gamma is -0.05
+def Func(Z,X,Y,gamma = (1,-0.05),reduceComp = 1):
     C = []
     if X.shape[0] == X.size: # if it is a vector
         T = X.size
@@ -54,6 +52,7 @@ def Func(Z,X,*Y,gammaN = -0.05,reduceComp = 1):
        np.fill_diagonal(S,tempS)
        M = S@np.transpose(V)@Q@V@np.transpose(S)
        D,W = la.eig(M)
+       D = np.absolute(D)
        ind = np.argsort(D) 
        ind = ind[::-1]
        D = D[ind]
@@ -74,23 +73,26 @@ def Func(Z,X,*Y,gammaN = -0.05,reduceComp = 1):
            }
     return output
 
-#def Analyze(struct,numComp = 5,Title = [],largeComp = 1,T = 800):
-#    components = struct["components"]
-#    fig1  = plt.figure()
-#    fig1.suptitle('Spatial Components')
-#    fig2  = plt.figure()
-#    fig2.suptitle('Time Course')
-#    for i in range(numComp*numComp):
-#        ax = fig1.add_subplot(numComp, numComp, i)
-#        ax.imshow(components[:,i].reshape((imgSize[0],imgSize[1]))
-#        ax.colorbar()
-#        ax.set_title('component %d' %i)
-#        
-#        ax = fig2.add_subplot(numComp, numComp, i)
-#        ax.plot(projected[:,i])
-#        ax.set_title('component %d' %i)
+def Analyze(struct,numComp = 5,Title = [],largeComp = 1,T = 800):
+    components = struct["components"]
+    projected = struct["projected"]
+    fig1  = plt.figure()
+    fig1.suptitle('Spatial Components')
+    fig2  = plt.figure()
+    fig2.suptitle('Time Course')
+    for i in range(numComp*numComp):
+        ax = fig1.add_subplot(numComp, numComp, i+1)
+        ax.imshow(np.absolute(components[:,i].reshape((globalVals.imgSize[0],globalVals.imgSize[1]))))
+        ax.set_title('component %d' %(i+1))
         
+        ax = fig2.add_subplot(numComp, numComp, i+1)
+        ax.plot(np.absolute(projected[i,:]))
+        ax.set_title('component %d' %(i+1))
         
+    plt.figure()
+    plt.plot(struct['D'],'bo')
+    plt.title('eigen-values in descending order')
+    return
     
     
 
