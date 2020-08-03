@@ -48,9 +48,8 @@ def Func(Z,X,Y,gamma = (1,-0.05),reduceComp = 1):
        components = components[:,ind]
     else:
        U,tempS,V = la.svd(Z,full_matrices=False)
-       S = np.zeros((T,T))
-       np.fill_diagonal(S,tempS)
-       M = S@np.transpose(V)@Q@V@np.transpose(S)
+       S = np.diag(tempS)
+       M = S@V@Q@V.T@np.transpose(S)
        D,W = la.eig(M)
        D = np.absolute(D)
        ind = np.argsort(D) 
