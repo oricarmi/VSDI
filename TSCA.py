@@ -11,7 +11,7 @@ import scipy as sp
 from numpy import linalg as la
 import numpy.matlib
 from matplotlib import pyplot as plt
-import globalVals
+#import globalVals
 
 def FrobNorm(A,B):
     return np.trace(np.transpose(B)@A)
@@ -73,6 +73,7 @@ def Func(Z,X,Y,gamma = (1,-0.05),reduceComp = 1):
     return output
 
 def Analyze(struct,numComp = 5,Title = [],largeComp = 1,T = 800):
+    [nrow,ncol] = [270,327]
     components = struct["components"]
     projected = struct["projected"]
     fig1  = plt.figure()
@@ -81,13 +82,11 @@ def Analyze(struct,numComp = 5,Title = [],largeComp = 1,T = 800):
     fig2.suptitle('Time Course')
     for i in range(numComp*numComp):
         ax = fig1.add_subplot(numComp, numComp, i+1)
-        ax.imshow(np.absolute(components[:,i].reshape((globalVals.imgSize[0],globalVals.imgSize[1]))))
+        ax.imshow(np.absolute(components[:,i].reshape((nrow,ncol))))
         ax.set_title('component %d' %(i+1))
-        
         ax = fig2.add_subplot(numComp, numComp, i+1)
         ax.plot(np.absolute(projected[i,:]))
-        ax.set_title('component %d' %(i+1))
-        
+        ax.set_title('component %d' %(i+1))        
     plt.figure()
     plt.plot(struct['D'],'bo')
     plt.title('eigen-values in descending order')

@@ -11,7 +11,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 import TSCA
 import numpy.matlib
-import globalVals
+#import globalVals
 import ICA
 from ICA import centerData
 from ICA import whitenData
@@ -31,7 +31,7 @@ m = int(math.sqrt(p))
 TotalTime = 10
 tAll = np.linspace(0,TotalTime,int(TotalTime*fs)) # time vector of entire recording
 imgSize = (40,40)
-globalVals.imgSize = imgSize
+#globalVals.imgSize = imgSize
 # <---- Create almost periodic 1.5Hz (noise) source
 freqs = 2*np.pi*np.arange(1.2,1.7,0.05)
 phases = 2*np.pi*np.random.rand(len(freqs))

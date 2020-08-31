@@ -9,7 +9,7 @@ import scipy as sp
 from numpy import linalg as la
 import numpy.matlib
 from matplotlib import pyplot as plt
-import globalVals
+#import globalVals
 
 def FrobNorm(A,B):
     return np.trace(np.transpose(B)@A)
@@ -95,14 +95,50 @@ class TSCA:
 ################################ END TSCA ###################################
 #===========================================================================#    
 ################################ GLM ########################################
-def GLM(Z,noiseFreqs,basis):
+def GLM(Z,noiseFreqs,responseSigs):
+    fs = 100
+    T = Z.shape[1] # total time
+    Z = Z.T
+    t = np.linspace(0,(T-1)/fs,T) # time vector
+    X1 = np.ones((T,1)) # DC
+    Xn = np.zeros((T,len(noiseFreqs)*2))
+    k=0
+    responseSigs = np.asarray(responseSigs).T
+    for i in noiseFreqs:
+        Xn[:,k] = np.sin(2*np.pi*i*t) 
+        Xn[:,k+1] = np.cos(2*np.pi*i*t)
+        k+=2
+    Xtot = np.concatenate((X1,Xn,responseSigs),1)
+    beta = la.inv(Xtot.T@Xtot)@Xtot.T@Z
+#    All = Xtot@beta
+#    Residuals = Z - All
+#    Signal = responseSigs@beta[-responseSigs.shape[1]:,:]+Residuals
+    return beta[-responseSigs.shape[1]:,:]
 ################################ END GLM ####################################
 #===========================================================================#    
 ################################ TMAX #######################################
 def Tmax(Z,responseSig,r_thresh,gaussSTD = 0):
+    return
 ################################ END TMAX ###################################
 #===========================================================================#    
 ################################ CORR #######################################
 def Corr(Z,responseSig):
+    return
 ################################ END CORR ###################################
-#===========================================================================#    
+#===========================================================================# 
+################################ AOF #######################################
+def AOF(Z,N=8):
+    if len(Z.shape)!=3:
+        print('please reshape Z to be 3d')
+        return
+    AOF = []
+    for i in range(N):
+        ax = fig2.add_subplot(1, 8, i+1)
+        temp = np.mean(Z[:,:,i*100+10:i*100+15],2)
+        temp = (temp-np.min(temp))/(np.max(temp)-np.min(temp))
+        AOF.append(temp)
+        #plt.imshow(temp) 
+    return AOF
+################################ END AOF ###################################
+#===========================================================================#
+
