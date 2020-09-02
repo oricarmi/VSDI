@@ -110,10 +110,10 @@ def GLM(Z,noiseFreqs,responseSigs):
         k+=2
     Xtot = np.concatenate((X1,Xn,responseSigs),1)
     beta = la.inv(Xtot.T@Xtot)@Xtot.T@Z
-#    All = Xtot@beta
-#    Residuals = Z - All
-#    Signal = responseSigs@beta[-responseSigs.shape[1]:,:]+Residuals
-    return beta[-responseSigs.shape[1]:,:]
+    All = Xtot@beta
+    Residuals = Z - All
+    Signal = responseSigs@beta[-responseSigs.shape[1]:,:]+Residuals
+    return beta[-responseSigs.shape[1]:,:],Signal
 ################################ END GLM ####################################
 #===========================================================================#    
 ################################ TMAX #######################################
