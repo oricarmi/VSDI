@@ -36,9 +36,6 @@ zzz = np.reshape(zz3D,(nrow*ncol,T))
 #ax.plot(zz3D[150,180,:])
 #ax.set_title(r'pixel [150,180]')
 
-# Try to perform min max normalization to temp 
-# sol : tempp = (temp-np.min(temp))/(np.max(temp)-np.min(temp))
-# Try to create a 270x327 matrix of numbers from [1,8] which says for each pixel which condition was the maximum
 #fig2 = plt.figure()
 #AOF = []
 #for i in range(8):
@@ -68,11 +65,13 @@ zzz = np.reshape(zz3D,(nrow*ncol,T))
 fig5 = plt.figure()
 mapsTSCA = []
 theoreticalSigs = [np.roll(responseSig,100*i) for i in range(8)]
+zzzCentered = hp.centerData(zzz)# Center mxied signals
+zzzWhitened = hp.whitenData(zzzCentered) # Whiten mixed signals
 for i,thisSig in enumerate(theoreticalSigs):
     ax = fig5.add_subplot(1, 8, i+1)
 #    Xc = hp.centerData(zzz)
 #    Xw = hp.MinMaxNorm(hp.whitenData(Xc.T)) 
-    temp = TSCA.Func(zzz,thisSig,[np.eye(len(responseSig))],(1,-0.25))
+    temp = TSCA.Func(zzzWhitened,thisSig,[np.eye(len(responseSig))],(1,-0.25))
     I = np.argmax(np.dot(temp["projected"][0:8,:],thisSig))
     tmp = np.reshape(np.abs(temp["components"][:,I]),(nrow,ncol))
     tmp = hp.MinMaxNorm(skimage.filters.gaussian(sp.signal.medfilt2d(tmp,[3,5]),0.2))
